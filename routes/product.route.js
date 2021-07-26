@@ -66,4 +66,16 @@ router.get("/:productId",productById,(req,res)=>{
     return res.json(req.product);
 })
 
+//@route    GET api/product/photo/productId
+//@desc     Get a product image by ID
+//@access   Public
+router.get("/photo/:productId", productById, (req, res)=>{
+    if (req.product.photo.data){
+        res.set('Content-Type', req.product.photo.contentType())
+        return res.send(req.product.photo.data);
+    }
+    res.status(400).json({
+        error: 'Failed to load image'
+    })
+})
 module.exports = router;
