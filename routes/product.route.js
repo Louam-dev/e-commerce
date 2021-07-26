@@ -5,6 +5,7 @@ const auth = require('../middleware/auth');
 const adminAuth = require ('../middleware/adminAuth');
 const formidable = require('formidable');
 const fs= require('fs')
+const productById= require('../middleware/productById')
 
 //@route    POST api/product
 //@desc     Create a product
@@ -54,6 +55,15 @@ router.post("/", auth, adminAuth, (req,res)=>{
     res.status(500).send('Server error');
         }
     })
+})
+
+//@route    GET api/product/productId
+//@desc     Get a product infos by ID (without photo)
+//@access   Public
+router.get("/:productId",productById,(req,res)=>{
+//To avoid response pollution caused by image, is provided another route only for img
+    req.product.photo=undefined;
+    return res.json(req.product);
 })
 
 module.exports = router;

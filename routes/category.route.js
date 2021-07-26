@@ -3,7 +3,7 @@ const router = express.Router();
 const Category = require('../models/Category')
 const auth = require('../middleware/auth')
 const adminAuth = require('../middleware/adminAuth')
-const categoryById= require('../middleware/categoryById')
+const categoryById = require('../middleware/categoryById')
 const {check, validationResult} = require('express-validator')
 
 
@@ -43,12 +43,12 @@ router.post('/', [
 //@route    GET api/category
 //@desc     Get all categories
 //@access   Public
-router.get('/all', async (req,res)=>{
+router.get('/all', async (req, res) => {
     try {
         let data = await Category.find({})
         res.json(data)
-    }catch (error) {
-console.log(error)
+    } catch (error) {
+        console.log(error)
         res.status(500).send('Server error')
     }
 })
@@ -56,22 +56,22 @@ console.log(error)
 //@route    GET api/category/:categoryID
 //@desc     Get single category
 //@access   Public
-router.get('/:categoryId',categoryById, async (req,res)=>{
+router.get('/:categoryId', categoryById, async (req, res) => {
     res.json(req.category);
 })
 
 //@route    PUT api/category/:categoryID
 //@desc     Update single category
 //@access   Private Admin
-router.put('/:categoryId',auth,adminAuth,categoryById,async (req,res)=>{
-    let category=req.category;
-    const {name}=req.body;
-    if(name) category.name= name.trim();
+router.put('/:categoryId', auth, adminAuth, categoryById, async (req, res) => {
+    let category = req.category;
+    const {name} = req.body;
+    if (name) category.name = name.trim();
 
     try {
-        category =await category.save()
+        category = await category.save()
         res.json(category)
-    }catch (error) {
+    } catch (error) {
         console.log(error.message)
         res.status(500).send('Server error');
     }
@@ -81,14 +81,14 @@ router.put('/:categoryId',auth,adminAuth,categoryById,async (req,res)=>{
 //@route    DELETE api/category/:categoryID
 //@desc     Delete single category
 //@access   Private Admin
-router.delete('/:categoryId',auth,adminAuth,categoryById,async (req,res)=>{
+router.delete('/:categoryId', auth, adminAuth, categoryById, async (req, res) => {
     let category = req.category;
-    try{
-        let deletedCategory=await category.remove();
+    try {
+        let deletedCategory = await category.remove();
         res.json({
-            message:  deletedCategory.name +' deleted successfully'
+            message: deletedCategory.name + ' deleted successfully'
         })
-    }catch (error){
+    } catch (error) {
         console.log(error.message)
         res.status(500).send('Server error');
     }
